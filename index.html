@@ -369,92 +369,100 @@
       </div>
     </footer>
 
-    <script>
-      // Mobile menu toggle
-      document.querySelector(".mobile-menu").addEventListener("click", () => {
-        document.querySelector("nav").classList.toggle("active");
-      });
+      <script>
+    // Mobile menu toggle
+    document.querySelector(".mobile-menu").addEventListener("click", () => {
+      document.querySelector("nav").classList.toggle("active");
+    });
 
-      // Active navigation highlighting and smooth scrolling
-      document.addEventListener("DOMContentLoaded", function () {
-        const sections = document.querySelectorAll("section");
-        const navLinks = document.querySelectorAll("nav a");
-        const headerHeight = document.querySelector("header").offsetHeight;
+    // Active navigation highlighting and smooth scrolling
+    document.addEventListener('DOMContentLoaded', function() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('nav a');
+      const headerHeight = document.querySelector('header').offsetHeight;
 
-        function updateActiveNav() {
-          let current = "";
-          const scrollPosition = window.scrollY + headerHeight + 100;
+      // Function to update active nav link
+      function updateActiveNav() {
+        let current = '';
+        const scrollPosition = window.scrollY + headerHeight + 100;
 
-          sections.forEach((section) => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            const sectionId = section.getAttribute("id");
-
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-              current = sectionId;
-            }
-          });
-
-          if (!current) {
-            let minDistance = Infinity;
-            sections.forEach((section) => {
-              const sectionTop = section.offsetTop;
-              const distance = Math.abs(sectionTop - (window.scrollY + headerHeight));
-              if (distance < minDistance) {
-                minDistance = distance;
-                current = section.getAttribute("id");
-              }
-            });
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          const sectionId = section.getAttribute('id');
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            current = sectionId;
           }
+        });
 
-          navLinks.forEach((link) => {
-            link.classList.remove("active");
-            if (link.getAttribute("href") === "#" + current) {
-              link.classList.add("active");
+        // If no section found in viewport, find the closest one
+        if (!current) {
+          let minDistance = Infinity;
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const distance = Math.abs(sectionTop - (window.scrollY + headerHeight));
+            if (distance < minDistance) {
+              minDistance = distance;
+              current = section.getAttribute('id');
             }
           });
         }
 
-        window.addEventListener("scroll", updateActiveNav);
-        updateActiveNav();
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+          }
+        });
+      }
 
-        // Smooth scroll
-        navLinks.forEach((link) => {
-          link.addEventListener("click", function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute("href");
-            const targetSection = document.querySelector(targetId);
+      // Update on scroll
+      window.addEventListener('scroll', updateActiveNav);
+      
+      // Update on page load
+      updateActiveNav();
 
-            if (targetSection) {
-              const targetPosition = targetSection.offsetTop - headerHeight;
-              window.scrollTo({
-                top: targetPosition,
-                behavior: "smooth",
-              });
-            }
-
-            if (window.innerWidth <= 795) {
-              document.querySelector("nav").classList.remove("active");
-            }
-          });
+      // Smooth scrolling for nav links
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          const targetSection = document.querySelector(targetId);
+          
+          if (targetSection) {
+            const targetPosition = targetSection.offsetTop - headerHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+          
+          // Close mobile menu after clicking
+          if (window.innerWidth <= 795) {
+            document.querySelector('nav').classList.remove('active');
+          }
         });
       });
+    });
 
-      // EmailJS Integration
-      document.getElementById("contactForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        emailjs
-          .sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", this)
-          .then(function (response) {
-            alert("Message sent successfully!");
-            console.log("SUCCESS!", response.status, response.text);
-            document.getElementById("contactForm").reset();
-          }),
-          function (error) {
-            alert("Failed to send message. Please try again.");
-            console.log("FAILED...", error);
-          };
-      });
-    </script>
+        document.getElementById('contactForm').addEventListener('submit', function(event){
+            event.preventDefault(); // prevent page reload
+
+            emailjs.sendForm('service_qmdac6e', 'template_1xes0wy', this)
+            .then(function(response) {
+                alert("Email sent successfully!");
+                console.log('SUCCESS!', response.status, response.text);
+                document.getElementById('contactForm').reset();
+            }, function(error) {
+                alert("Failed to send email. Try again.");
+                console.log('FAILED...', error);
+            });
+        });
+
+  </script>
+
   </body>
 </html>
